@@ -1,26 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useContext, useEffect} from 'react';
+import './styles/app.css'
+import {BrowserRouter} from "react-router-dom";
+import AppRouter from "./components/AppRouter";
+import {AuthContext} from "./index";
+import {observable} from "mobx";
+import {observer} from "mobx-react-lite";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    const {store} = useContext(AuthContext)
+
+    useEffect(() => {
+        store.checkAuth().then(r => {
+        })
+
+    }, [store])
+
+
+    return (
+        <AuthContext.Provider value={{
+            store
+        }}>
+            <BrowserRouter>
+                <AppRouter/>
+            </BrowserRouter>
+        </AuthContext.Provider>
+
+
+    );
 }
 
-export default App;
+export default observer(App);

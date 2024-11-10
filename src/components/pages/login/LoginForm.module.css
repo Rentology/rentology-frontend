@@ -1,0 +1,50 @@
+
+.loginPage {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    justify-content: space-between; /* Разместит элементы с равными отступами */
+    align-items: center;
+}
+
+.loginForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.imageContainerLeft, .imageContainerRight {
+    flex-basis: 33%;
+    align-self: flex-end;
+    justify-self: flex-start;
+    height: 50%; /* Высота контейнера */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+.loginWrapper {
+    flex-basis: 33%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 90%;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
+    background: white;
+}
+
+
+.loginForm p{
+    font-weight: bold;
+}
+
+
+.logo {
+    width: 400px;
+    height: 400px;
+}
+
+
