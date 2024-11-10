@@ -1,0 +1,61 @@
+/* Базовые стили для navbar */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    width: 100vw;
+    background-color: #333;
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar__logo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.navbar__logo img {
+    width: 100px;
+    height: 100px;
+}
+
+.navbar__links {
+    display: flex;
+    list-style: none;
+}
+
+.navbar__links li {
+    margin-left: 1.5rem;
+}
+
+.navbar__links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+
+.navbar__links a:hover {
+    color: #007bff;
+}
+
+.navbar__button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.navbar__button:hover {
+    background-color: #0056b3;
+}
+
