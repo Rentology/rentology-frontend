@@ -3,7 +3,6 @@ import './styles/app.css'
 import {BrowserRouter} from "react-router-dom";
 import AppRouter from "./components/AppRouter";
 import {AuthContext} from "./index";
-import {observable} from "mobx";
 import {observer} from "mobx-react-lite";
 
 function App() {
