@@ -40,6 +40,7 @@ export default class Store {
         }
         catch (e) {
             console.log(e)
+            return e
         }
     }
 
