@@ -5,6 +5,7 @@
     height: 100vh;
     justify-content: space-between; /* Разместит элементы с равными отступами */
     align-items: center;
+    background-color: #fafbfc;
 }
 
 .loginForm {
@@ -45,6 +46,10 @@
 .logo {
     width: 400px;
     height: 400px;
+}
+
+.errorBorder {
+    border-color: red !important;
 }
 
 
