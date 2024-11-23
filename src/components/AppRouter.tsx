@@ -5,6 +5,7 @@ import {AuthContext} from "../index";
 import {observer} from "mobx-react-lite";
 import Main from "./pages/main/Main";
 import RegisterForm from "./pages/register/RegisterForm";
+import Profile from './pages/profile/Profile';
 
 const AppRouter: FC = () => {
     const {store} = useContext(AuthContext)
@@ -15,20 +16,25 @@ const AppRouter: FC = () => {
         );
     }
 
-    return (
-        store.isAuth ? (
+
+    if (store.isAuth) {
+        return (
             <Routes>
                 <Route path="/main" element={<Main/>}/>
+                <Route path="/profile" element={<Profile/>}/>
                 <Route path="*" element={<Navigate to={"/main"} />} />
             </Routes>
-        ) : (
+        )
+    }
+    else {
+        return (
             <Routes>
                 <Route path="/login" element={<LoginForm />} />
                 <Route path="/register" element={<RegisterForm/>}/>
                 <Route path="*" element={<Navigate to={"/login"} />} />
             </Routes>
         )
-    )
+    }
 };
 
 export default observer(AppRouter);

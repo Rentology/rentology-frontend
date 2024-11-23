@@ -10,8 +10,7 @@ function App() {
     const {store} = useContext(AuthContext)
 
     useEffect(() => {
-        store.checkAuth().then(r => {
-        })
+        store.checkAuth()
 
     }, [store])
 

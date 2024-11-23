@@ -7,7 +7,7 @@ import {API_URL} from "../http";
 
 export default class Store {
     isAuth = false
-    isLoading = false
+    isLoading = true
 
     constructor() {
         makeAutoObservable(this)
@@ -58,15 +58,18 @@ export default class Store {
     async checkAuth() {
         this.setLoading(true);
         try {
-            const response = await axios.get(`${API_URL}/users/2`, { withCredentials: true });
+            const response = await axios.get(`${API_URL}/users/1`, { withCredentials: true });
             if (response.status === 200) {
+                console.log('set true')
                 this.setAuth(true);
             } else {
+                console.log('set false')
                 this.setAuth(false);
             }
         } catch (e) {
             console.log(e);
         } finally {
+            console.log('finally')
             this.setLoading(false);
         }
     }

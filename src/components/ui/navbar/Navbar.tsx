@@ -14,12 +14,16 @@ const Navbar = () => {
                 <div>Rentology</div>
             </div>
             <ul className={cl.navbar__links}>
-                <li><Link to="/">Home</Link></li>
+                <li><Link to="/">Главная</Link></li>
                 <li><Link to="/about">About</Link></li>
                 <li><Link to="/services">Services</Link></li>
                 <li><Link to="/contact">Contact</Link></li>
             </ul>
-            <button className={cl.navbar__button} onClick={() => store.logout()}>Выйти</button>
+            <div className={cl.navbar__buttons}>
+                <button className={cl.navbar__button}><Link to="/profile">Профиль</Link></button>
+                <button className={cl.navbar__button} onClick={() => store.logout()}>Выйти</button>
+            </div>
+
         </nav>
     );
 };
