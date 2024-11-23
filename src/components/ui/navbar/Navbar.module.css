@@ -65,3 +65,12 @@
     gap: 10px;
 }
 
+.navbar__button a {
+    text-decoration: none;
+    color: white;
+}
+
+.navbar__button a:active {
+    color: white;
+}
+
