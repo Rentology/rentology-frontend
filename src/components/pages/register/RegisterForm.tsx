@@ -2,7 +2,7 @@ import React, {FC, useContext, useState} from 'react';
 import LoginInput from "../../ui/input/LoginInput";
 import cl from './RegisterForm.module.css';
 import {AuthContext} from "../../../index";
-import LoginButton from "../../ui/button/LoginButton";
+import LoginButton from "../../ui/button/loginButton/LoginButton";
 import logo from '../../../assets/images/logo.png';
 import {observer} from "mobx-react-lite";
 import {AxiosError} from "axios";
