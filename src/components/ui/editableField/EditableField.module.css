@@ -1,0 +1,35 @@
+
+.editableField {
+}
+
+.edit {
+    display: flex;
+    flex-direction: column;
+
+}
+.field {
+    display: flex;
+    flex-direction: row;
+}
+
+.edit input {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.errorText {
+    margin-block-start: 0;
+    margin-block-end: 0;
+    color: red;
+    font-size: 14px;
+}
+
+.header {
+    margin-bottom: 20px;
+}
+
+.button {
+    margin-top: 20px;
+}

@@ -2,7 +2,7 @@ import React, {FC, useContext, useState} from 'react';
 import LoginInput from "../../ui/input/LoginInput";
 import cl from './LoginForm.module.css';
 import {AuthContext} from "../../../index";
-import LoginButton from "../../ui/button/LoginButton";
+import LoginButton from "../../ui/button/loginButton/LoginButton";
 import peopleImage1 from '../../../assets/images/people1.png';
 import peopleImage2 from '../../../assets/images/people2.png';
 import logo from '../../../assets/images/logo.png';

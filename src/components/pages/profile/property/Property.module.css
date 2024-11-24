@@ -1,0 +1,21 @@
+.property {
+    border: 1px solid #ccc;
+    padding: 16px;
+    margin: 16px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.property h2 {
+    margin: 0 0 8px;
+    font-size: 20px;
+}
+
+.property p {
+    margin: 4px 0;
+    font-size: 14px;
+}
+
+.property strong {
+    font-weight: bold;
+}

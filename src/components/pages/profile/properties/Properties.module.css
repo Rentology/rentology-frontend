@@ -1,0 +1,44 @@
+.properties {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.properties h1 {
+    margin-bottom: 16px;
+}
+
+.properties-list {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    width: 100%;
+    max-width: 1200px;
+}
+
+.form {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.form input {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form button {
+    padding: 8px 16px;
+    font-size: 14px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.form button:hover {
+    background-color: #0056b3;
+}

@@ -4,10 +4,12 @@ import UserService from "../services/UserService"
 import Cookies from "js-cookie";
 import axios from "axios";
 import {API_URL} from "../http";
+import {IUser} from "../models/IUser";
 
 export default class Store {
     isAuth = false
     isLoading = true
+    user : IUser | null = null
 
     constructor() {
         makeAutoObservable(this)
@@ -21,11 +23,16 @@ export default class Store {
         this.isLoading = bool
     }
 
+    setUser(user: IUser | null) {
+        this.user = user;
+    }
+
     async login(email: string, password: string) {
         try {
             const response = await AuthService.login(email, password)
             const user = await UserService.getUserByEmail(email)
-            console.log(user)
+            localStorage.setItem("id", String(user.data.id))
+            this.setUser(user.data)
             this.setAuth(true)
 
         }
@@ -48,6 +55,7 @@ export default class Store {
         try {
             const response = await AuthService.logout()
             Cookies.remove('token')
+            localStorage.removeItem("id")
             this.setAuth(false)
         }
         catch (e) {
@@ -58,18 +66,17 @@ export default class Store {
     async checkAuth() {
         this.setLoading(true);
         try {
-            const response = await axios.get(`${API_URL}/users/1`, { withCredentials: true });
+            const userId : string | null = localStorage.getItem("id")
+            const response = await axios.get(`${API_URL}/users/${userId}`, { withCredentials: true });
             if (response.status === 200) {
-                console.log('set true')
                 this.setAuth(true);
+                this.setUser(response.data)
             } else {
-                console.log('set false')
                 this.setAuth(false);
             }
         } catch (e) {
             console.log(e);
         } finally {
-            console.log('finally')
             this.setLoading(false);
         }
     }
