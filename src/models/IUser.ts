@@ -4,7 +4,7 @@ export interface IUser {
     name: string,
     lastName: string,
     secondName: string
-    birth_date: string
+    birthDate: string
     sex: string
 
 }
