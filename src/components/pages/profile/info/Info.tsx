@@ -1,22 +1,23 @@
-import React, {FC} from 'react';
+import React, {FC, useState} from 'react';
 import styles from './Info.module.css';
 import { IUser } from "../../../../models/IUser";
 import logo from "../../../../assets/images/profile-logo.png"
 import EditableField from "../../../ui/editableField/EditableField";
-import {validateDate, validateEmail} from "../../../../validation/validator";
+import {validateDate, validateEmail, validatePhone} from "../../../../validation/validator";
 import UserService from "../../../../services/UserService";
 const Info: FC<{ user: IUser | null }> = ({ user }) => {
 
-    const displayedUser = user ?? {
-        birthDate: "не указано",
-        email: "не указано",
-        id: BigInt(0),
-        lastName: "не указано",
-        name: "не указано",
-        secondName: "не указано",
-        sex: "не указано",
-        profileImage: "https://via.placeholder.com/100", // Заглушка для картинки
-    }
+    const [displayedUser, setDisplayedUser] = useState<IUser>({
+        birthDate: user?.birthDate?.trim() || "не указано",
+        email: user?.email?.trim() || "не указано",
+        id: user?.id ?? BigInt(0),
+        lastName: user?.lastName?.trim() || "не указано",
+        name: user?.name?.trim() || "не указано",
+        secondName: user?.secondName?.trim() || "не указано",
+        sex: user?.sex?.trim() || "не указано",
+        phone: user?.phone?.trim() || "не указано",
+    });
+
 
     const updateField = async (field: string, value: string) => {
         console.log(localStorage.getItem("id"))
@@ -34,6 +35,10 @@ const Info: FC<{ user: IUser | null }> = ({ user }) => {
         const response = await UserService.updateUser(updateUser);
         if (response.status === 200) {
             console.log(`Поле ${field} успешно обновлено.`);
+            setDisplayedUser((prevUser) => ({
+                ...prevUser,
+                [field]: value,
+            }));
         } else {
             console.error(`Ошибка обновления поля ${field}:`, response.data);
         }
@@ -47,23 +52,56 @@ const Info: FC<{ user: IUser | null }> = ({ user }) => {
                 alt="Профиль пользователя"
                 className={styles.profileImage}
             />
-            <EditableField header="Укажите новую почту"
+            <EditableField
+                field="Имя"
+                header="Укажите новое имя"
+                inputText="Имя"
+                buttonText="Готово"
+                onClick={(value) => updateField("name", value)}>
+                {displayedUser.name}
+            </EditableField>
+            <EditableField
+                field="Фамилия"
+                header="Укажите новую фамилию"
+                inputText="Фамилия"
+                buttonText="Готово"
+                onClick={(value) => updateField("lastName", value)}>
+                {displayedUser.lastName}
+            </EditableField>
+            <EditableField
+                field="Отчество"
+                header="Укажите новое отчество"
+                inputText="Отчество"
+                buttonText="Готово"
+                onClick={(value) => updateField("secondName", value)}>
+                {displayedUser.secondName}
+            </EditableField>
+            <EditableField
+                           field="Email"
+                           header="Укажите новую почту"
                            inputText="Адрес"
                            buttonText="Готово"
                            validate={validateEmail}
                            onClick={(value) => updateField("email", value)}>
-                <p className={styles.info}>
-                    Email: <span className={styles.highlight}>{displayedUser.email}</span>
-                </p>
+                {displayedUser.email}
             </EditableField>
-            <EditableField header="Укажите новую дату рождения"
+            <EditableField
+                field="Телефон"
+                header="Укажите новый номер телефона"
+                inputText="Номер телефона"
+                buttonText="Готово"
+                validate={validatePhone}
+                onClick={(value) => updateField("phone", value)}>
+                {displayedUser.phone}
+            </EditableField>
+            <EditableField
+                           field="Дата рождения"
+                           header="Укажите новую дату рождения"
                            inputText="Дата рождения"
                            buttonText="Готово"
                            validate={validateDate}
                            onClick={(value) => updateField("birthDate", value)}>
-                <p className={styles.info}>
-                    Дата рождения: <span className={styles.highlight}>{displayedUser.birthDate}</span>
-                </p>
+                {displayedUser.birthDate}
             </EditableField>
         </div>
     );

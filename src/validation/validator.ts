@@ -28,3 +28,14 @@ export const validateDate = (date: string): [boolean, string] => {
 
     return [true, "Valid date"];
 }
+
+export const validatePhone = (phone: string): [boolean, string] => {
+    // Регулярное выражение для валидации телефона с международным кодом или без
+    const phoneRegex = /^(?:\+?(\d{1,3}))?[\s\-]?\(?\d{1,4}\)?[\s\-]?\d{1,4}[\s\-]?\d{1,4}$/;
+
+    if (!phoneRegex.test(phone)) {
+        return [false, "Некорректный формат телефона"];
+    }
+
+    return [true, ""];
+}

@@ -5,13 +5,14 @@ import DefaultButton from "../button/defaultButton/DefaultButton";
 import pencil from "../../../assets/images/pencil.png"
 interface EditableFieldProps {
     children: ReactNode
+    field: string
     header: string
     inputText: string
     buttonText: string
     validate?: (text: string) => [boolean, string]
     onClick?: (value : string) => Promise<void>
 }
-const EditableField : FC<EditableFieldProps> = ({children, header, inputText, buttonText, validate, onClick}) => {
+const EditableField : FC<EditableFieldProps> = ({children, field, header, inputText, buttonText, validate, onClick}) => {
     const [modal, setModal] = useState<boolean>(false)
     const [disabled, setDisabled] = useState<boolean>(true)
     const [error, setError] = useState<boolean>(false)
@@ -51,12 +52,26 @@ const EditableField : FC<EditableFieldProps> = ({children, header, inputText, bu
                     }
                 }
             }
+        } else {
+            if (onClick) {
+                try {
+                    await onClick(text)
+                    setError(false)
+                    setErrorText('')
+                    setModal(false)
+                } catch (error) {
+                    setError(true)
+                    setErrorText('У нас какая-то ошибка :(')
+                }
+            }
         }
     }
     return (
         <div className={cl.editableField}>
             <div className={cl.field}>
-                {children}
+                <p className={cl.info}>
+                    {field}: <span className={cl.highlight}>{children}</span>
+                </p>
                 <img className={cl.pencil} src={pencil} onClick={() => setModal(true)} alt={"pencil"}/>
             </div>
             <ModalWindow visible={modal} setVisible={setModal}>
