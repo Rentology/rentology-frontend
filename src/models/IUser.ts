@@ -1,10 +1,11 @@
 export interface IUser {
     id: bigint,
     email: string,
-    name: string,
-    lastName: string,
-    secondName: string
-    birthDate: string
-    sex: string
+    phone: string | null,
+    name: string | null,
+    lastName: string | null,
+    secondName: string | null
+    birthDate: string | null
+    sex: string | null
 
 }
