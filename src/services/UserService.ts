@@ -18,6 +18,10 @@ export default class UserService {
     static async createUserByToken(): Promise<AxiosResponse<IUser>> {
         return $api.post("/users", {})
     }
+
+    static async updateUser(user : IUser): Promise<AxiosResponse<IUser>> {
+        return $api.patch("/users", user)
+    }
     static fetchUsers() {
         
     }
