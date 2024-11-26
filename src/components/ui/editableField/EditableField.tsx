@@ -8,10 +8,10 @@ interface EditableFieldProps {
     header: string
     inputText: string
     buttonText: string
-    validate?: (text: string) => [boolean, string];
-
+    validate?: (text: string) => [boolean, string]
+    onClick?: (value : string) => Promise<void>
 }
-const EditableField : FC<EditableFieldProps> = ({children, header, inputText, buttonText, validate}) => {
+const EditableField : FC<EditableFieldProps> = ({children, header, inputText, buttonText, validate, onClick}) => {
     const [modal, setModal] = useState<boolean>(false)
     const [disabled, setDisabled] = useState<boolean>(true)
     const [error, setError] = useState<boolean>(false)
@@ -32,16 +32,24 @@ const EditableField : FC<EditableFieldProps> = ({children, header, inputText, bu
         }
     }, [modal]);
 
-    const handle = () => {
+    const handle = async () => {
         if (validate) {
             const [isValid, errorText] = validate(text)
             if (!isValid) {
                 setError(true)
                 setErrorText(errorText)
-            }
-            else {
-                setError(false)
-                setErrorText('')
+            } else {
+                if (onClick) {
+                    try {
+                        await onClick(text)
+                        setError(false)
+                        setErrorText('')
+                        setModal(false)
+                    } catch (error) {
+                        setError(true)
+                        setErrorText('У нас какая-то ошибка :(')
+                    }
+                }
             }
         }
     }
