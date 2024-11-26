@@ -10,6 +10,7 @@
 .field {
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 
 .edit input {
@@ -32,4 +33,15 @@
 
 .button {
     margin-top: 20px;
+}
+
+.pencil {
+    width: 15px;
+    height: 15px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.pencil:hover {
+    opacity: 0.8;
 }

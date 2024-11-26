@@ -2,7 +2,7 @@ import React, {FC, ReactNode, useEffect, useState} from 'react';
 import ModalWindow from "../modal/ModalWindow";
 import cl from "./EditableField.module.css"
 import DefaultButton from "../button/defaultButton/DefaultButton";
-
+import pencil from "../../../assets/images/pencil.png"
 interface EditableFieldProps {
     children: ReactNode
     header: string
@@ -49,7 +49,7 @@ const EditableField : FC<EditableFieldProps> = ({children, header, inputText, bu
         <div className={cl.editableField}>
             <div className={cl.field}>
                 {children}
-                <button onClick={() => setModal(true)}>Редактировать</button>
+                <img className={cl.pencil} src={pencil} onClick={() => setModal(true)} alt={"pencil"}/>
             </div>
             <ModalWindow visible={modal} setVisible={setModal}>
                 <div className={cl.edit}>
