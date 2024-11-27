@@ -6,7 +6,7 @@ import LoginButton from "../../ui/button/loginButton/LoginButton";
 import logo from '../../../assets/images/logo.png';
 import {observer} from "mobx-react-lite";
 import {AxiosError} from "axios";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const RegisterForm: FC = () => {
     const [email, setEmail] = useState<string>('');
@@ -94,6 +94,7 @@ const RegisterForm: FC = () => {
                     {passwordsError && <div style={{color: 'red'}}>Пароли не совпадают</div>}
                     <LoginButton onClick={handleLogin}>Зарегистрироваться</LoginButton>
                 </div>
+                <Link className={cl.link}  to="/login">Уже есть учётная запись?</Link>
             </div>
             <div className={cl.imageContainerRight}></div>
         </div>

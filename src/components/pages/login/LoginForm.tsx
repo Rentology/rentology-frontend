@@ -7,6 +7,7 @@ import peopleImage1 from '../../../assets/images/people1.png';
 import peopleImage2 from '../../../assets/images/people2.png';
 import logo from '../../../assets/images/logo.png';
 import {observer} from "mobx-react-lite";
+import {Link} from "react-router-dom";
 
 const LoginForm: FC = () => {
     const [email, setEmail] = useState<string>('');
@@ -66,6 +67,7 @@ const LoginForm: FC = () => {
                     />
                     <LoginButton onClick={handleLogin}>Авторизация</LoginButton>
                 </div>
+                <Link className={cl.link} to="/register">Создать аккаунт</Link>
             </div>
             <div className={cl.imageContainerRight} style={{backgroundImage: `url(${peopleImage2})`}}></div>
         </div>

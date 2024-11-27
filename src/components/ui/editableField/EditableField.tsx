@@ -6,13 +6,14 @@ import pencil from "../../../assets/images/pencil.png"
 interface EditableFieldProps {
     children: ReactNode
     field: string
+    blocked?: boolean
     header: string
     inputText: string
     buttonText: string
     validate?: (text: string) => [boolean, string]
     onClick?: (value : string) => Promise<void>
 }
-const EditableField : FC<EditableFieldProps> = ({children, field, header, inputText, buttonText, validate, onClick}) => {
+const EditableField : FC<EditableFieldProps> = ({children, field, blocked, header, inputText, buttonText, validate, onClick}) => {
     const [modal, setModal] = useState<boolean>(false)
     const [disabled, setDisabled] = useState<boolean>(true)
     const [error, setError] = useState<boolean>(false)
@@ -72,7 +73,7 @@ const EditableField : FC<EditableFieldProps> = ({children, field, header, inputT
                 <p className={cl.info}>
                     {field}: <span className={cl.highlight}>{children}</span>
                 </p>
-                <img className={cl.pencil} src={pencil} onClick={() => setModal(true)} alt={"pencil"}/>
+                {!blocked && <img className={cl.pencil} src={pencil} onClick={() => setModal(true)} alt={"pencil"}/>}
             </div>
             <ModalWindow visible={modal} setVisible={setModal}>
                 <div className={cl.edit}>

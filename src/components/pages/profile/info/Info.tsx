@@ -78,6 +78,7 @@ const Info: FC<{ user: IUser | null }> = ({ user }) => {
             </EditableField>
             <EditableField
                            field="Email"
+                           blocked={true}
                            header="Укажите новую почту"
                            inputText="Адрес"
                            buttonText="Готово"
