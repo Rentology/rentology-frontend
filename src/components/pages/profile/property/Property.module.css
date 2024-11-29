@@ -1,21 +1,62 @@
 .property {
-    border: 1px solid #ccc;
-    padding: 16px;
-    margin: 16px;
+    margin: 16px auto; /* Центрирование компонента */
     border-radius: 8px;
-    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    width: 250px;
 }
 
-.property h2 {
-    margin: 0 0 8px;
-    font-size: 20px;
+.imageContainer {
+    display: flex;
+    justify-content: center;
 }
 
-.property p {
-    margin: 4px 0;
-    font-size: 14px;
+.image {
+    width: 250px;
+    height: 250px;
+    object-fit: cover; /* Указывает, как изображение вписывается в область */
+    border-radius: 8px; /* Закругление изображения */
 }
 
-.property strong {
+.details {
+    margin-top: 12px;
+}
+
+.title {
+    font-size: 1.2rem;
+    color: #007BFF;
+}
+
+.title:hover {
+    color: orangered;
+    cursor: pointer;
+}
+
+.price {
     font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.location {
+    font-size: 1.1rem;
+    color: gray;
+}
+
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1); /* Тонкая граница */
+    border-left-color: #007BFF;
+    border-radius: 50%;
+    width: 50px; /* Диаметр */
+    height: 50px; /* Диаметр */
+    animation: spin 1s linear infinite; /* Анимация вращения */
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
