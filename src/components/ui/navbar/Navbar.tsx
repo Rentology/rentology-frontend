@@ -21,6 +21,7 @@ const Navbar = () => {
             </ul>
             <div className={cl.navbar__buttons}>
                 <button className={cl.navbar__button}><Link to="/profile">Профиль</Link></button>
+                <button className={cl.navbar__button}><Link to="/add-property">Разместить объявление</Link></button>
                 <button className={cl.navbar__button} onClick={() => store.logout()}>Выйти</button>
             </div>
 

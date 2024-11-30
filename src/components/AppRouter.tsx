@@ -23,7 +23,7 @@ const AppRouter: FC = () => {
             <Routes>
                 <Route path="/main" element={<Main/>}/>
                 <Route path="/profile" element={<Profile/>}/>
-                <Route path="/edit" element={<AddProperty/>}/>
+                <Route path="/add-property" element={<AddProperty/>}/>
                 <Route path="*" element={<Navigate to={"/main"} />} />
             </Routes>
         )
