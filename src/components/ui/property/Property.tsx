@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Property.module.css";
-import { IProperty } from "../../../../models/IProperty";
+import { IProperty } from "../../../models/IProperty";
 import cl from "./Property.module.css";
 import SimpleImageSlider from "react-simple-image-slider";
-import ImageService from "../../../../services/ImageService";
-import { Image } from "../../../../models/Image";
+import ImageService from "../../../services/ImageService";
+import { Image } from "../../../models/Image";
 
 interface PropertyProps {
     property: IProperty;
@@ -21,8 +21,6 @@ const Property: React.FC<PropertyProps> = ({ property }) => {
                 // Получаем массив изображений по propertyId
                 const response = await ImageService.getImageByPropertyId(property.id);
                 const imageList: Image[] = response.data;
-                console.log(imageList)
-
                 // Загружаем каждую картинку по её ID
                 const loadedImages = await Promise.all(
                     imageList.map(async (image) => {

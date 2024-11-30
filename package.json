@@ -3,6 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.13.5",
+    "@emotion/styled": "^11.13.5",
+    "@fontsource/roboto": "^5.1.0",
+    "@mui/material": "^6.1.9",
+    "@pbe/react-yandex-maps": "^1.2.5",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -13,10 +18,12 @@
     "@types/react-dom": "^18.3.1",
     "axios": "^1.7.7",
     "js-cookie": "^3.0.5",
+    "material-ui-popup-state": "^5.3.1",
     "mobx": "^6.13.5",
     "mobx-react-lite": "^4.0.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-google-autocomplete": "^2.7.3",
     "react-router-dom": "^6.27.0",
     "react-scripts": "5.0.1",
     "react-simple-image-slider": "^2.4.1",
@@ -48,6 +55,7 @@
     ]
   },
   "devDependencies": {
+    "@types/google.maps": "^3.58.1",
     "@types/js-cookie": "^3.0.6"
   }
 }
