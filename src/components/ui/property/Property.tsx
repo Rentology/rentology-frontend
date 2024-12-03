@@ -19,7 +19,7 @@ const Property: React.FC<PropertyProps> = ({ property }) => {
         const fetchImages = async () => {
             try {
                 // Получаем массив изображений по propertyId
-                const response = await ImageService.getImageByPropertyId(property.id);
+                const response = await ImageService.getImageByPropertyId(property.id || BigInt(0));
                 const imageList: Image[] = response.data;
                 // Загружаем каждую картинку по её ID
                 const loadedImages = await Promise.all(

@@ -59,7 +59,7 @@ const EditablePropertyList: React.FC<EditablePropertyListProps> = ({ownerId}) =>
     return (
         <div className={cl.propertyList}>
             {properties.map((property) => (
-                <EditableProperty key={property.id.toString()} property={property} />
+                <EditableProperty key={(property.id || 0).toString()} property={property} />
             ))}
         </div>
     );
