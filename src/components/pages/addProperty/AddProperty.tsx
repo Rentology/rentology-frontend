@@ -7,31 +7,37 @@ import {
     MenuItem,
     Typography,
     Paper,
+    IconButton,
 } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import Navbar from "../../ui/navbar/Navbar";
-import AddressAutocomplete from '../../ui/autocomplete/AddressAutocomplete'
+import AddressAutocomplete from '../../ui/autocomplete/AddressAutocomplete';
+import {AddPropertyRequest} from "../../../models/request/AddPropertyRequest";
+import {IProperty} from "../../../models/IProperty";
+import {IPropertyDetails} from "../../../models/IPropertyDetails";
+import PropertyService from "../../../services/PropertyService";
 
 const AddProperty: React.FC = () => {
-    const [property, setProperty] = useState({
+    const [property, setProperty] = useState<IProperty>({
         title: '',
         location: '',
-        price: '',
+        price: 0,
         propertyType: 'apartment',
         rentalType: 'longTerm',
-        maxGuests: '',
+        maxGuests: 0,
     });
 
-    const [details, setDetails] = useState({
-        floor: '',
-        maxFloor: '',
-        area: '',
-        rooms: '',
-        houseCreationYear: '',
+    const [details, setDetails] = useState<IPropertyDetails>({
+        floor: 0,
+        maxFloor: 0,
+        area: 0,
+        rooms: 0,
+        houseCreationYear: 0,
         houseType: '',
         description: '',
     });
 
-    const [images, setImages] = useState<string[]>([]);
+    const [images, setImages] = useState<{ id: string; url: string, base64: string }[]>([]);
 
     const handlePropertyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setProperty({ ...property, [e.target.name]: e.target.value });
@@ -41,27 +47,59 @@ const AddProperty: React.FC = () => {
         setDetails({ ...details, [e.target.name]: e.target.value });
     };
 
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
-            const uploadedImages = Array.from(e.target.files).map((file) =>
-                URL.createObjectURL(file)
+            const uploadedImages = await Promise.all(
+                Array.from(e.target.files).map(async (file) => {
+                    const url = URL.createObjectURL(file);
+                    const id = Math.random().toString(36).substr(2, 9);
+
+                    // Конвертация в Base64
+                    const base64 = await convertToBase64(file);
+
+                    return { id, url, base64 };
+                })
             );
             setImages((prev) => [...prev, ...uploadedImages]);
         }
     };
 
+    const convertToBase64 = (file: File): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = (error) => reject(error);
+        });
+    };
 
-    const handleSubmit = () => {
+
+    const handleRemoveImage = (id: string) => {
+        setImages((prev) => prev.filter((image) => image.id !== id));
+    };
+
+    const handleSubmit = async () => {
         console.log('Property:', property);
         console.log('Details:', details);
         console.log('Images:', images);
-        // Add logic to send data to the server
+
+        const request : AddPropertyRequest = {
+            property: property,
+            propertyDetails: details,
+            images: images.map((image) => image.base64)
+        }
+        console.log(request)
+
+        const response = await PropertyService.createProperty(request)
+
+        console.log(response.data)
+
+
     };
 
     return (
         <div>
-            <Navbar/>
-            {/* Main Content */}
+            <Navbar />
             <Paper
                 elevation={3}
                 sx={{ padding: 4, margin: '20px auto', maxWidth: 800 }}
@@ -94,8 +132,14 @@ const AddProperty: React.FC = () => {
                                 label="Цена"
                                 name="price"
                                 type="number"
-                                value={property.price}
-                                onChange={handlePropertyChange}
+                                value={property.price === 0 ? "" : property.price}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    setProperty((prev) => ({
+                                        ...prev,
+                                        price: value === "" ? 0 : Number(value), // Преобразуем в число
+                                    }));
+                                }}
                                 required
                             />
                         </Grid>
@@ -105,8 +149,14 @@ const AddProperty: React.FC = () => {
                                 label="Максимальное количество гостей"
                                 name="maxGuests"
                                 type="number"
-                                value={property.maxGuests}
-                                onChange={handlePropertyChange}
+                                value={property.maxGuests === 0 ? "" : property.maxGuests}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    setProperty((prev) => ({
+                                        ...prev,
+                                        maxGuests: value === "" ? 0 : Number(value), // Преобразуем в число
+                                    }));
+                                }}
                                 required
                             />
                         </Grid>
@@ -147,8 +197,14 @@ const AddProperty: React.FC = () => {
                                 label="Этаж"
                                 name="floor"
                                 type="number"
-                                value={details.floor}
-                                onChange={handleDetailsChange}
+                                value={details.floor === 0 ? "" : details.floor}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    setDetails((prev) => ({
+                                        ...prev,
+                                        floor: value === "" ? 0 : Number(value), // Преобразуем в число
+                                    }));
+                                }}
                             />
                         </Grid>
                         <Grid item xs={4}>
@@ -157,8 +213,14 @@ const AddProperty: React.FC = () => {
                                 label="Максимальный этаж"
                                 name="maxFloor"
                                 type="number"
-                                value={details.maxFloor}
-                                onChange={handleDetailsChange}
+                                value={details.maxFloor === 0 ? "" : details.maxFloor}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    setDetails((prev) => ({
+                                        ...prev,
+                                        maxFloor: value === "" ? 0 : Number(value), // Преобразуем в число
+                                    }));
+                                }}
                             />
                         </Grid>
                         <Grid item xs={4}>
@@ -167,8 +229,14 @@ const AddProperty: React.FC = () => {
                                 label="Площадь (м²)"
                                 name="area"
                                 type="number"
-                                value={details.area}
-                                onChange={handleDetailsChange}
+                                value={details.area === 0 ? "" : details.area}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    setDetails((prev) => ({
+                                        ...prev,
+                                        area: value === "" ? 0 : Number(value), // Преобразуем в число
+                                    }));
+                                }}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -177,8 +245,14 @@ const AddProperty: React.FC = () => {
                                 label="Количество комнат"
                                 name="rooms"
                                 type="number"
-                                value={details.rooms}
-                                onChange={handleDetailsChange}
+                                value={details.rooms === 0 ? "" : details.rooms}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    setDetails((prev) => ({
+                                        ...prev,
+                                        rooms: value === "" ? 0 : Number(value), // Преобразуем в число
+                                    }));
+                                }}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -187,8 +261,14 @@ const AddProperty: React.FC = () => {
                                 label="Год постройки"
                                 name="houseCreationYear"
                                 type="number"
-                                value={details.houseCreationYear}
-                                onChange={handleDetailsChange}
+                                value={details.houseCreationYear === 0 ? "" : details.houseCreationYear}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    setDetails((prev) => ({
+                                        ...prev,
+                                        houseCreationYear: value === "" ? 0 : Number(value), // Преобразуем в число
+                                    }));
+                                }}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -236,19 +316,39 @@ const AddProperty: React.FC = () => {
                                     marginTop: 2,
                                 }}
                             >
-                                {images.map((img, index) => (
-                                    <img
-                                        key={index}
-                                        src={img}
-                                        alt={`Property Image ${index + 1}`}
-                                        style={{
+                                {images.map((img) => (
+                                    <Box
+                                        key={img.id}
+                                        sx={{
+                                            position: 'relative',
                                             width: '100px',
                                             height: '100px',
-                                            objectFit: 'cover',
-                                            borderRadius: '8px',
-                                            border: '1px solid #ddd',
                                         }}
-                                    />
+                                    >
+                                        <img
+                                            src={img.url}
+                                            alt={`Property`}
+                                            style={{
+                                                width: '100%',
+                                                height: '100%',
+                                                objectFit: 'cover',
+                                                borderRadius: '8px',
+                                                border: '1px solid #ddd',
+                                            }}
+                                        />
+                                        <IconButton
+                                            size="small"
+                                            onClick={() => handleRemoveImage(img.id)}
+                                            sx={{
+                                                position: 'absolute',
+                                                top: 0,
+                                                right: 0,
+                                                backgroundColor: 'rgba(255,255,255,0.7)',
+                                            }}
+                                        >
+                                            <CloseIcon fontSize="small" />
+                                        </IconButton>
+                                    </Box>
                                 ))}
                             </Box>
                         </Grid>
