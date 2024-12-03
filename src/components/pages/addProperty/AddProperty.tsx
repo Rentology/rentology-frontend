@@ -41,6 +41,7 @@ const AddProperty: React.FC = () => {
 
     const handlePropertyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setProperty({ ...property, [e.target.name]: e.target.value });
+        console.log(property)
     };
 
     const handleDetailsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -124,7 +125,7 @@ const AddProperty: React.FC = () => {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <AddressAutocomplete />
+                            <AddressAutocomplete setAddress={(address) => {setProperty({...property, location: address})}} />
                         </Grid>
                         <Grid item xs={6}>
                             <TextField

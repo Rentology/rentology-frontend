@@ -7,7 +7,6 @@ const Main: FC = () => {
         <div>
             <Navbar/>
             Главная страница
-            <AddressAutocomplete/>
         </div>
     );
 };

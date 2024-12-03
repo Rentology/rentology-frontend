@@ -7,7 +7,11 @@ interface Suggestion {
     formatted_address: string;
 }
 
-const AddressAutocomplete: React.FC = () => {
+interface AddressAutocompleteProps {
+    setAddress: (address: string) => void
+}
+
+const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({setAddress}) => {
     const [query, setQuery] = useState('');
     const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
     const [loading, setLoading] = useState(false);
@@ -51,6 +55,7 @@ const AddressAutocomplete: React.FC = () => {
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target;
         setQuery(value);
+        setAddress(value)
         fetchSuggestions(value);
     };
 
