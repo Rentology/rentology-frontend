@@ -11,7 +11,7 @@ const AddressAutocomplete: React.FC = () => {
     const [query, setQuery] = useState('');
     const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
     const [loading, setLoading] = useState(false);
-
+    const apiToken = process.env.REACT_APP_API_TOKEN;
     const fetchSuggestions = useCallback(async (input: string) => {
         if (input.length < 3) {
             setSuggestions([]);
@@ -22,7 +22,7 @@ const AddressAutocomplete: React.FC = () => {
         try {
             const response = await axios.get('https://suggest-maps.yandex.ru/v1/suggest', {
                 params: {
-                    apikey: 'f95d0062-60cc-4237-a631-7b2b85613b46', // Замените на ваш API-ключ
+                    apikey: apiToken, // Замените на ваш API-ключ
                     text: input,
                     lang: 'ru_RU',
                     results: 5,
