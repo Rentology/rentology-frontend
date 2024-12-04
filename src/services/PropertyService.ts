@@ -24,4 +24,8 @@ export default class PropertyService {
     static async getPropertyDetailsById(id : bigint) : Promise<AxiosResponse<IPropertyDetails>> {
         return $api.get(`/prop-details/${id}`)
     }
+
+    static async getAllProperties() : Promise<AxiosResponse<IProperty[]>> {
+        return $api.get(`/properties`)
+    }
 }

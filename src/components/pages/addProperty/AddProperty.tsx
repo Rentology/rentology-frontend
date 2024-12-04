@@ -45,11 +45,12 @@ const AddProperty: React.FC = () => {
     const navigate = useNavigate();
     const handlePropertyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setProperty({ ...property, [e.target.name]: e.target.value });
-        console.log(property)
     };
 
     const handleDetailsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDetails({ ...details, [e.target.name]: e.target.value });
+        console.log(details)
+
     };
 
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,6 +85,7 @@ const AddProperty: React.FC = () => {
     };
 
     const handleSubmit = async () => {
+
         setError('')
         if (property.title === '' || property.price === 0 || property.maxGuests === 0) {
             setError('Заполните обязательные поля!')

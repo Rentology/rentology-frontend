@@ -8,6 +8,8 @@ import cl from "./Profile.module.css";
 const Profile: FC = () => {
     const { store } = useContext(AuthContext);
 
+
+
     return (
         <div>
             <Navbar />
@@ -16,7 +18,7 @@ const Profile: FC = () => {
                     <Info user={store.user} />
                 </div>
                 <div className={cl.properties}>
-                    <EditablePropertyList ownerId={BigInt(1)}/>
+                    <EditablePropertyList ownerId={store.user?.id || BigInt(0)}/>
                 </div>
             </div>
         </div>

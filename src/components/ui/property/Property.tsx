@@ -5,6 +5,8 @@ import cl from "./Property.module.css";
 import SimpleImageSlider from "react-simple-image-slider";
 import ImageService from "../../../services/ImageService";
 import { Image } from "../../../models/Image";
+import { useNavigate } from "react-router-dom";
+import { Skeleton } from "@mui/material"; // Импортируем Skeleton
 
 interface PropertyProps {
     property: IProperty;
@@ -14,23 +16,22 @@ const Property: React.FC<PropertyProps> = ({ property }) => {
     const [images, setImages] = useState<{ url: string }[]>([]); // Сохраняем массив загруженных URL
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchImages = async () => {
             try {
-                // Получаем массив изображений по propertyId
                 const response = await ImageService.getImageByPropertyId(property.id || BigInt(0));
                 const imageList: Image[] = response.data;
-                // Загружаем каждую картинку по её ID
                 const loadedImages = await Promise.all(
                     imageList.map(async (image) => {
-                        const blob = await ImageService.getImageById(BigInt(image.id)); // Получаем Blob по ID
-                        const url = URL.createObjectURL(blob); // Создаём URL из Blob
-                        return { url }; // Возвращаем объект с URL
+                        const blob = await ImageService.getImageById(BigInt(image.id));
+                        const url = URL.createObjectURL(blob);
+                        return { url };
                     })
                 );
 
-                setImages(loadedImages); // Сохраняем загруженные URL в состоянии
+                setImages(loadedImages);
                 setLoading(false);
             } catch (err) {
                 console.error("Ошибка при загрузке изображений:", err);
@@ -41,7 +42,6 @@ const Property: React.FC<PropertyProps> = ({ property }) => {
 
         fetchImages();
 
-        // Очищаем URL при размонтировании
         return () => {
             images.forEach((image) => URL.revokeObjectURL(image.url));
         };
@@ -49,23 +49,57 @@ const Property: React.FC<PropertyProps> = ({ property }) => {
 
     const priceText = property.rentalType === "shortTerm" ? "в день" : "в месяц";
 
+    const handleTitleClick = () => {
+        navigate(`/properties/${property.id}`);
+    };
+
     return (
         <div className={styles.property}>
-            <div style={{ width: 250, height: 250, display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <div
+                style={{
+                    width: 250,
+                    height: 250,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    cursor: "pointer",
+                }}
+            >
                 {loading ? (
-                    // Индикатор загрузки
-                    <div className={cl.spinner}></div>
+                    <Skeleton variant="rounded" width={250} height={250} />
                 ) : error ? (
-                    <p style={{textAlign: "center"}}>{error}</p>
+                    <p style={{ textAlign: "center" }}>{error}</p>
                 ) : (
-                    // Слайдер, когда данные загружены
-                    <SimpleImageSlider width={250} height={250} images={images} showNavs={true} showBullets={true} />
+                    <SimpleImageSlider
+                        onClick={handleTitleClick}
+                        width={250}
+                        height={250}
+                        images={images}
+                        showNavs={true}
+                        showBullets={true}
+                    />
                 )}
             </div>
             <div>
-                <h3 className={cl.title}>{property.title}</h3>
-                <p className={cl.price}>{property.price} ₽ {priceText}</p>
-                <p className={cl.location}>{property.location}</p>
+                {loading ? (
+                    <Skeleton variant="text" width={200} height={30} />
+                ) : (
+                    <h3 className={cl.title} onClick={handleTitleClick}>
+                        {property.title}
+                    </h3>
+                )}
+                {loading ? (
+                    <Skeleton variant="text" width={100} height={20} />
+                ) : (
+                    <p className={cl.price}>
+                        {property.price} ₽ {priceText}
+                    </p>
+                )}
+                {loading ? (
+                    <Skeleton variant="text" width={150} height={20} />
+                ) : (
+                    <p className={cl.location}>{property.location}</p>
+                )}
             </div>
         </div>
     );

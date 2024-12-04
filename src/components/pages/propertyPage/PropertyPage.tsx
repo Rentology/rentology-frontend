@@ -10,6 +10,8 @@ import PropertyService from "../../../services/PropertyService";
 import ImageService from "../../../services/ImageService";
 import {Image} from "../../../models/Image";
 import Navbar from "../../ui/navbar/Navbar";
+import UserService from "../../../services/UserService";
+import {IUser} from "../../../models/IUser";
 
 
 const PropertyPage: React.FC = () => {
@@ -47,6 +49,7 @@ const PropertyPage: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [property, setProperty] = useState<IProperty>(defaultProperty)
     const [propertyDetails, setPropertyDetails] = useState<IPropertyDetails>(defaultPropertyDetails)
+    const [owner, setOwner] = useState<IUser>()
     const [images, setImages] = useState<string[]>(defaultImages);
     const [imagesLoading, setImagesLoading] = useState<boolean>(false)
     const [propertiesLoading, setPropertiesLoading] = useState<boolean>(false)
@@ -133,6 +136,22 @@ const PropertyPage: React.FC = () => {
         };
 
         fetchPropertyDetailsData();
+    }, [property.id]);
+
+    useEffect(() => {
+        const fetchOwnerData = async () => {
+            try {
+                if (property.ownerId) {
+                    console.log(property.id)
+                    const ownerUserResponse = await UserService.getUserById(BigInt(property.ownerId))
+                    setOwner(ownerUserResponse.data)
+                }
+            } catch (e) {
+                console.error("Ошибка при загрузке данных", e);
+            }
+        };
+
+        fetchOwnerData();
     }, [property.id]);
 
 
@@ -246,27 +265,48 @@ const PropertyPage: React.FC = () => {
 
                         <Box mt={4}>
                             <Typography variant="h5">Детали</Typography>
-                            <Typography variant="body2" mt={1}>
-                                <strong>Этаж:</strong> {propertyDetails.floor}/{propertyDetails.maxFloor}
-                            </Typography>
-                            <Typography variant="body2" mt={1}>
-                                <strong>Площадь:</strong> {propertyDetails.area} м²
-                            </Typography>
-                            <Typography variant="body2" mt={1}>
-                                <strong>Комнаты:</strong> {propertyDetails.rooms}
-                            </Typography>
-                            <Typography variant="body2" mt={1}>
-                                <strong>Тип дома:</strong> {propertyDetails.houseType}
-                            </Typography>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} sm={6}>
+                                    <Box>
+                                        <Typography variant="body2" mt={1}>
+                                            <strong>Этаж:</strong> {propertyDetails.floor}/{propertyDetails.maxFloor}
+                                        </Typography>
+                                        <Typography variant="body2" mt={1}>
+                                            <strong>Площадь:</strong> {propertyDetails.area} м²
+                                        </Typography>
+                                        <Typography variant="body2" mt={1}>
+                                            <strong>Комнаты:</strong> {propertyDetails.rooms}
+                                        </Typography>
+                                        <Typography variant="body2" mt={1}>
+                                            <strong>Тип дома:</strong> {propertyDetails.houseType}
+                                        </Typography>
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <Box>
+                                        <Typography variant="body2" mt={1}>
+                                            <strong>Максимальное количество гостей:</strong> {property.maxGuests}
+                                        </Typography>
+                                        <Typography variant="body2" mt={1}>
+                                            <strong>Построен:</strong> {propertyDetails.houseCreationYear} г.
+                                        </Typography>
+                                    </Box>
+                                </Grid>
+                            </Grid>
                         </Box>
+
                         <Box sx={{paddingTop: 2, width: 600}}>
+                            <Typography variant="h5">Расположение</Typography>
+                            <Typography variant="body2" mt={1}>
+                                <strong>{property.location}</strong>
+                            </Typography>
                             <YandexMapWithAddress address={property.location} />
                         </Box>
                     </Grid>
 
                     <Grid item xs={4}>
                         <Grid sx={{ padding: 2 }}>
-                            <Typography variant="h4">{property.price} ₽ в месяц</Typography>
+                            <Typography variant="h4">{property.price} ₽ в {property.rentalType == "shortTerm" ? 'день' : 'месяц'} </Typography>
                             <Typography variant="body2" color="textSecondary" mt={1}>
                                 Без комиссии
                             </Typography>
@@ -288,7 +328,7 @@ const PropertyPage: React.FC = () => {
                                 Написать сообщение
                             </Button>
                         </Grid>
-                        <UserCard name={'Senya'} role={'Арендодатель'}/>
+                        <UserCard name={owner?.name || 'Неизвестно'} role={'Арендодатель'}/>
                     </Grid>
                 </Grid>
             </Box>
