@@ -263,7 +263,7 @@ const PropertyPage: React.FC = () => {
                             <Typography variant="body2" mt={1}>
                                 <strong>{property.location}</strong>
                             </Typography>
-                            <YandexMapWithAddress address={property.location} />
+                            {/*<YandexMapWithAddress address={property.location} />*/}
                         </Box>
                     </Grid>
 
