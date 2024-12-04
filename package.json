@@ -1,5 +1,7 @@
+
 {
   "name": "rentology",
+  "homepage":"./",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -58,8 +60,11 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/google.maps": "^3.58.1",
     "@types/js-cookie": "^3.0.6",
-    "@types/react-slick": "^0.23.13"
+    "@types/react-slick": "^0.23.13",
+    "css-loader": "^7.1.2",
+    "style-loader": "^4.0.0"
   }
 }
