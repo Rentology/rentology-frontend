@@ -12,6 +12,7 @@ import {Image} from "../../../models/Image";
 import Navbar from "../../ui/navbar/Navbar";
 import UserService from "../../../services/UserService";
 import {IUser} from "../../../models/IUser";
+import {API_URL} from "../../../http";
 
 
 const PropertyPage: React.FC = () => {
@@ -62,6 +63,8 @@ const PropertyPage: React.FC = () => {
     };
 
     useEffect(() => {
+
+        console.log(API_URL)
         const fetchPropertyData = async () => {
             try {
                 if (id) {
