@@ -20,14 +20,20 @@ const Main: React.FC = () => {
         const fetchProperties = async () => {
             try {
                 const response = await PropertyService.getAllProperties();
-                setProperties(response.data);
-                setFilteredProperties(response.data);
+                // Проверяем, что response.data - это массив
+                if (Array.isArray(response.data)) {
+                    setProperties(response.data);
+                    setFilteredProperties(response.data);
+                } else {
+                    console.error("Полученные данные не являются массивом:", response.data);
+                }
                 setLoading(false);
             } catch (err) {
                 console.error("Ошибка при загрузке недвижимости:", err);
                 setLoading(false);
             }
         };
+
 
         fetchProperties();
     }, []);
