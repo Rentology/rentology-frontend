@@ -45,14 +45,13 @@ const PropertyPage: React.FC = () => {
 
     const { id } = useParams<{ id: string }>(); // извлекаем id из URL
 
-
     const [currentIndex, setCurrentIndex] = useState<number>(0);
-    const [property, setProperty] = useState<IProperty>(defaultProperty)
-    const [propertyDetails, setPropertyDetails] = useState<IPropertyDetails>(defaultPropertyDetails)
-    const [owner, setOwner] = useState<IUser>()
+    const [property, setProperty] = useState<IProperty>(defaultProperty);
+    const [propertyDetails, setPropertyDetails] = useState<IPropertyDetails>(defaultPropertyDetails);
+    const [owner, setOwner] = useState<IUser | undefined>();
     const [images, setImages] = useState<string[]>(defaultImages);
-    const [imagesLoading, setImagesLoading] = useState<boolean>(false)
-    const [propertiesLoading, setPropertiesLoading] = useState<boolean>(false)
+    const [imagesLoading, setImagesLoading] = useState<boolean>(true); // Показываем Skeleton до загрузки изображений
+    const [propertiesLoading, setPropertiesLoading] = useState<boolean>(false); // Флаг загрузки данных
 
     const handleNextImage = () => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -61,7 +60,6 @@ const PropertyPage: React.FC = () => {
     const handlePrevImage = () => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
     };
-
 
     useEffect(() => {
         const fetchPropertyData = async () => {
@@ -88,15 +86,15 @@ const PropertyPage: React.FC = () => {
             try {
                 setPropertiesLoading(true);
 
-                // Загружаем владельца после загрузки данных недвижимости
+                // Загружаем владельца
                 const ownerUserResponse = await UserService.getUserById(BigInt(property?.ownerId || 0));
                 setOwner(ownerUserResponse.data);
 
-                // Загружаем детали недвижимости после владельца
+                // Загружаем детали недвижимости
                 const propertyDetailsResponse = await PropertyService.getPropertyDetailsById(BigInt(id || 0));
                 setPropertyDetails(propertyDetailsResponse.data);
 
-                // Загружаем изображения после всех данных
+                // Загружаем изображения
                 const imageResponse = await ImageService.getImageByPropertyId(property.id);
                 const imageList: Image[] = imageResponse.data;
                 if (imageList) {
@@ -112,13 +110,13 @@ const PropertyPage: React.FC = () => {
             } catch (err) {
                 console.error("Ошибка при загрузке данных:", err);
             } finally {
-                setPropertiesLoading(false);
+                setImagesLoading(false); // Изображения загружены
+                setPropertiesLoading(false); // Данные загружены
             }
         };
 
         fetchData();
     }, [property.id, id]);
-
 
 
 
