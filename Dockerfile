@@ -15,14 +15,19 @@ COPY . .
 # Собираем приложение с использованием .env.production
 RUN npm run build
 
-# Stage 2: Serve the build using Nginx
-FROM nginx:alpine
+# Stage 2: Serve the build using Serve (instead of Nginx)
+FROM node:16
 
-# Копируем собранное приложение в директорию Nginx
-COPY --from=build /app/build /usr/share/nginx/html
+WORKDIR /app
 
-# Открываем порт для Nginx
-EXPOSE 80
+# Устанавливаем зависимость serve
+RUN npm install -g serve
 
-# Запускаем Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Копируем собранное приложение в контейнер
+COPY --from=build /app/build /app/build
+
+# Открываем порт для serve
+EXPOSE 5000
+
+# Запускаем сервер serve для обслуживания статических файлов
+CMD ["serve", "-s", "build", "-l", "5000"]
