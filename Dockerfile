@@ -13,7 +13,7 @@ RUN npm install
 COPY . .
 
 # Собираем приложение с использованием .env.production
-RUN npm run build
+RUN NODE_ENV=production npm run build
 
 # Stage 2: Serve the build using Nginx
 FROM nginx:alpine
