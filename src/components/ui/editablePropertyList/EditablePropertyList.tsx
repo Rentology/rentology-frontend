@@ -8,31 +8,6 @@ interface EditablePropertyListProps {
     ownerId: bigint
 }
 const EditablePropertyList: React.FC<EditablePropertyListProps> = ({ownerId}) => {
-    // Пример списка свойств
-    // const properties: IProperty[] = [
-    //     {
-    //         id: BigInt(1),
-    //         ownerId: 1,
-    //         title: "Квартира-студия, 53 м², 8/10 эт.",
-    //         location: "рп. Новоивановское, Немчиновка",
-    //         price: 100,
-    //         propertyType: "apartment",
-    //         rentalType: "longTerm",
-    //         maxGuests: 4,
-    //         createdAt: "2004",
-    //     },
-    //     {
-    //         id: BigInt(2),
-    //         ownerId: 2,
-    //         title: "Дом, 120 м², 2 этажа",
-    //         location: "Москва, Рублевское шоссе",
-    //         price: 300,
-    //         propertyType: "house",
-    //         rentalType: "shortTerm",
-    //         maxGuests: 8,
-    //         createdAt: "2015",
-    //     },
-    // ];
 
     const [properties, setProperties] = useState<IProperty[]>([]); // Сохраняем массив загруженных URL
     const [loading, setLoading] = useState<boolean>(true);
@@ -55,11 +30,16 @@ const EditablePropertyList: React.FC<EditablePropertyListProps> = ({ownerId}) =>
     }, [ownerId])
 
 
+    const handleDelete = (id: bigint) => {
+        // Удаляем объект из списка
+        setProperties((prevProperties) => prevProperties.filter((property) => property.id !== id));
+    };
+
 
     return (
         <div className={cl.propertyList}>
             {properties.map((property) => (
-                <EditableProperty key={(property.id || 0).toString()} property={property} />
+                <EditableProperty key={(property.id || 0).toString()} property={property} onDelete={handleDelete} />
             ))}
         </div>
     );

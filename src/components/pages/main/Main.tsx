@@ -1,8 +1,9 @@
 import React, {FC} from 'react';
 import Navbar from "../../ui/navbar/Navbar";
-import AddressAutocomplete from "../../ui/autocomplete/AddressAutocomplete";
+import PropertyPage from "../propertyPage/PropertyPage";
 
 const Main: FC = () => {
+
     return (
         <div>
             <Navbar/>

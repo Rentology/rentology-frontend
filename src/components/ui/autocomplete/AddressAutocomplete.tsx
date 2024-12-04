@@ -8,21 +8,22 @@ interface Suggestion {
 }
 
 interface AddressAutocompleteProps {
-    setAddress: (address: string) => void
+    setAddress: (address: string) => void;
 }
 
-const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({setAddress}) => {
+const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({ setAddress }) => {
     const [query, setQuery] = useState('');
     const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
     const [loading, setLoading] = useState(false);
     const apiToken = process.env.REACT_APP_API_TOKEN;
+
     const fetchSuggestions = useCallback(async (input: string) => {
         if (input.length < 3) {
             setSuggestions([]);
             return;
         }
 
-        setLoading(true);  // Начинаем загрузку
+        setLoading(true); // Начинаем загрузку
         try {
             const response = await axios.get('https://suggest-maps.yandex.ru/v1/suggest', {
                 params: {
@@ -48,15 +49,20 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({setAddress}) =
             console.error('Ошибка при запросе автозаполнения:', error);
             setSuggestions([]);
         } finally {
-            setLoading(false);  // Завершаем загрузку
+            setLoading(false); // Завершаем загрузку
         }
     }, []);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target;
         setQuery(value);
-        setAddress(value)
         fetchSuggestions(value);
+    };
+
+    const handleSelect = (event: any, value: Suggestion | null) => {
+        if (value) {
+            setAddress(value.formatted_address); // Обновляем адрес при выборе
+        }
     };
 
     return (
@@ -65,10 +71,11 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({setAddress}) =
                 disablePortal
                 options={suggestions}
                 getOptionLabel={(option) => option.formatted_address}
+                onChange={handleSelect} // Обработчик выбора
                 renderInput={(params) => (
-                    <TextField {...params} label="Введите адрес" onChange={handleChange} />
+                    <TextField {...params} label="Введите адрес" onChange={handleChange} value={query} />
                 )}
-                loading={loading}  // Показывает индикатор загрузки, если запрос в процессе
+                loading={loading} // Показывает индикатор загрузки, если запрос в процессе
             />
         </div>
     );

@@ -7,7 +7,7 @@ import {
     MenuItem,
     Typography,
     Paper,
-    IconButton,
+    IconButton, CircularProgress,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Navbar from "../../ui/navbar/Navbar";
@@ -16,6 +16,7 @@ import {AddPropertyRequest} from "../../../models/request/AddPropertyRequest";
 import {IProperty} from "../../../models/IProperty";
 import {IPropertyDetails} from "../../../models/IPropertyDetails";
 import PropertyService from "../../../services/PropertyService";
+import { useNavigate } from 'react-router-dom'
 
 const AddProperty: React.FC = () => {
     const [property, setProperty] = useState<IProperty>({
@@ -39,6 +40,9 @@ const AddProperty: React.FC = () => {
 
     const [images, setImages] = useState<{ id: string; url: string, base64: string }[]>([]);
 
+    const [error, setError] = useState<string>('')
+    const [isLoading, setIsLoading] = useState(false)
+    const navigate = useNavigate();
     const handlePropertyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setProperty({ ...property, [e.target.name]: e.target.value });
         console.log(property)
@@ -80,21 +84,30 @@ const AddProperty: React.FC = () => {
     };
 
     const handleSubmit = async () => {
-        console.log('Property:', property);
-        console.log('Details:', details);
-        console.log('Images:', images);
-
+        setError('')
+        if (property.title === '' || property.price === 0 || property.maxGuests === 0) {
+            setError('Заполните обязательные поля!')
+            return
+        }
         const request : AddPropertyRequest = {
             property: property,
             propertyDetails: details,
             images: images.map((image) => image.base64)
         }
-        console.log(request)
 
-        const response = await PropertyService.createProperty(request)
-
-        console.log(response.data)
-
+        try {
+            setIsLoading(true)
+            const response = await PropertyService.createProperty(request)
+            setError('')
+            navigate('/profile')
+        }
+        catch (e) {
+            console.log(e)
+            setError('У нас какая-то ошибка :(')
+        }
+        finally {
+            setIsLoading(false)
+        }
 
     };
 
@@ -356,9 +369,15 @@ const AddProperty: React.FC = () => {
 
                         {/* Кнопка отправки */}
                         <Grid item xs={12}>
-                            <Button variant="contained" color="primary" onClick={handleSubmit}>
-                                Сохранить
+
+                            <Button variant="contained" color="primary" sx={{ minWidth: 150 }} onClick={handleSubmit}>
+                                {isLoading ? (
+                                    <CircularProgress size={20} color="inherit"/>
+                                ) : (
+                                    "Сохранить"
+                                )}
                             </Button>
+                            <p style={{color: "red"}}>{error !== '' ? error : ''}</p>
                         </Grid>
                     </Grid>
                 </Box>
