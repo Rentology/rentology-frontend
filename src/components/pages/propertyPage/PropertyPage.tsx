@@ -62,99 +62,62 @@ const PropertyPage: React.FC = () => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
     };
 
+
     useEffect(() => {
         const fetchPropertyData = async () => {
             try {
                 if (id) {
-                    setPropertiesLoading(true)
+                    setPropertiesLoading(true);
                     const propertyResponse = await PropertyService.getPropertyById(BigInt(id));
-                    console.log(propertyResponse.data);
-
                     setProperty(propertyResponse.data);
                 }
             } catch (e) {
                 console.error("Ошибка при загрузке данных", e);
-            }
-            finally {
-                setPropertiesLoading(false)
+            } finally {
+                setPropertiesLoading(false);
             }
         };
 
         fetchPropertyData();
-    }, [id]);  // Зависимость от id
-
+    }, [id]);
 
     useEffect(() => {
-        const fetchImages = async () => {
+        const fetchData = async () => {
+            if (!property.id) return;
+
             try {
-                setImagesLoading(true)
-                console.log(property); // В этом месте property уже актуальное
-                if (property.id) {
-                    const response = await ImageService.getImageByPropertyId(property.id);
-                    const imageList: Image[] = response.data;
+                setPropertiesLoading(true);
 
-                    if (imageList != null) {
-                        // Загружаем каждую картинку по её ID
-                        const loadedImages = await Promise.all(
-                            imageList.map(async (image) => {
-                                const blob = await ImageService.getImageById(BigInt(image.id)); // Получаем Blob по ID
-                                return URL.createObjectURL(blob); // Возвращаем объект с URL
-                            })
-                        );
-                        setImages(loadedImages); // Сохраняем загруженные URL в состоянии
-                    }
+                // Загружаем владельца после загрузки данных недвижимости
+                const ownerUserResponse = await UserService.getUserById(BigInt(property?.ownerId || 0));
+                setOwner(ownerUserResponse.data);
 
+                // Загружаем детали недвижимости после владельца
+                const propertyDetailsResponse = await PropertyService.getPropertyDetailsById(BigInt(id || 0));
+                setPropertyDetails(propertyDetailsResponse.data);
 
+                // Загружаем изображения после всех данных
+                const imageResponse = await ImageService.getImageByPropertyId(property.id);
+                const imageList: Image[] = imageResponse.data;
+                if (imageList) {
+                    const loadedImages = await Promise.all(
+                        imageList.map(async (image) => {
+                            const blob = await ImageService.getImageById(BigInt(image.id));
+                            return URL.createObjectURL(blob);
+                        })
+                    );
+                    setImages(loadedImages);
                 }
+
             } catch (err) {
-                console.error("Ошибка при загрузке изображений:", err);
-            }
-            finally {
-                setImagesLoading(false)
-            }
-        };
-
-        if (property.id) {
-            fetchImages();
-        }
-    }, [property.id])
-
-    useEffect(() => {
-        const fetchPropertyDetailsData = async () => {
-            try {
-                if (id) {
-                    console.log(property.id)
-                    setPropertiesLoading(true)
-                    const propertyDetailsResponse = await PropertyService.getPropertyDetailsById(BigInt(id));
-                    console.log(propertyDetailsResponse.data)
-                    setPropertyDetails(propertyDetailsResponse.data);
-                }
-            } catch (e) {
-                console.error("Ошибка при загрузке данных", e);
-            }
-            finally {
-                setPropertiesLoading(false)
+                console.error("Ошибка при загрузке данных:", err);
+            } finally {
+                setPropertiesLoading(false);
             }
         };
 
-        fetchPropertyDetailsData();
-    }, [property.id]);
-
-    useEffect(() => {
-        const fetchOwnerData = async () => {
-            try {
-                if (property.ownerId) {
-                    console.log(property.id)
-                    const ownerUserResponse = await UserService.getUserById(BigInt(property.ownerId))
-                    setOwner(ownerUserResponse.data)
-                }
-            } catch (e) {
-                console.error("Ошибка при загрузке данных", e);
-            }
-        };
-
-        fetchOwnerData();
-    }, [property.id]);
+        fetchData();
+    }, [property.id, id]);
 
 
 
