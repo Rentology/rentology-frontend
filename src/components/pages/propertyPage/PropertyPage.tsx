@@ -92,17 +92,19 @@ const PropertyPage: React.FC = () => {
                 if (property.id) {
                     const response = await ImageService.getImageByPropertyId(property.id);
                     const imageList: Image[] = response.data;
-                    console.log(imageList);
 
-                    // Загружаем каждую картинку по её ID
-                    const loadedImages = await Promise.all(
-                        imageList.map(async (image) => {
-                            const blob = await ImageService.getImageById(BigInt(image.id)); // Получаем Blob по ID
-                            return URL.createObjectURL(blob); // Возвращаем объект с URL
-                        })
-                    );
+                    if (imageList != null) {
+                        // Загружаем каждую картинку по её ID
+                        const loadedImages = await Promise.all(
+                            imageList.map(async (image) => {
+                                const blob = await ImageService.getImageById(BigInt(image.id)); // Получаем Blob по ID
+                                return URL.createObjectURL(blob); // Возвращаем объект с URL
+                            })
+                        );
+                        setImages(loadedImages); // Сохраняем загруженные URL в состоянии
+                    }
 
-                    setImages(loadedImages); // Сохраняем загруженные URL в состоянии
+
                 }
             } catch (err) {
                 console.error("Ошибка при загрузке изображений:", err);
