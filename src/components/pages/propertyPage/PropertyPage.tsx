@@ -90,6 +90,7 @@ const PropertyPage: React.FC = () => {
                 setPropertiesLoading(true);
 
                 // Загружаем владельца
+                console.log('Собственность: ' + property)
                 const ownerUserResponse = await UserService.getUserById(BigInt(property?.ownerId || 0));
                 setOwner(ownerUserResponse.data);
 
