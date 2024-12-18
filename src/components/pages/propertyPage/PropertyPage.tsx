@@ -62,6 +62,8 @@ const PropertyPage: React.FC = () => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
     };
 
+    const [phone, setPhone] = useState('Показать телефон')
+
     useEffect(() => {
 
         console.log(API_URL)
@@ -284,12 +286,13 @@ const PropertyPage: React.FC = () => {
                             </Typography>
 
                             <Button
+                                onClick={() => {setPhone(owner?.phone || 'Телефон не указан :(')}}
                                 variant="contained"
                                 color="success"
                                 fullWidth
                                 sx={{ mt: 2 }}
                             >
-                                Показать телефон
+                                {phone}
                             </Button>
                         </Grid>
                         <UserCard name={owner?.name || 'Неизвестно'} role={'Арендодатель'}/>
