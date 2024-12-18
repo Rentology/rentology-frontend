@@ -267,7 +267,7 @@ const PropertyPage: React.FC = () => {
                             <Typography variant="body2" mt={1}>
                                 <strong>{property.location}</strong>
                             </Typography>
-                            {/*<YandexMapWithAddress address={property.location} />*/}
+                            <YandexMapWithAddress address={property.location} />
                         </Box>
                     </Grid>
 
@@ -285,14 +285,6 @@ const PropertyPage: React.FC = () => {
                                 sx={{ mt: 2 }}
                             >
                                 Показать телефон
-                            </Button>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                fullWidth
-                                sx={{ mt: 1 }}
-                            >
-                                Написать сообщение
                             </Button>
                         </Grid>
                         <UserCard name={owner?.name || 'Неизвестно'} role={'Арендодатель'}/>
