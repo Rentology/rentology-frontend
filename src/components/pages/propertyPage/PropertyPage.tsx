@@ -72,6 +72,11 @@ const PropertyPage: React.FC = () => {
                     const propertyResponse = await PropertyService.getPropertyById(BigInt(id));
                     setProperty(propertyResponse.data);
                 }
+                if (!id) {
+                    console.error("ID не указан");
+                    return;
+                }
+
             } catch (e) {
                 console.error("Ошибка при загрузке данных", e);
             } finally {
