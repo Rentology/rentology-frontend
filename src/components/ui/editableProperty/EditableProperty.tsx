@@ -51,7 +51,7 @@ const EditableProperty: React.FC<EditablePropertyProps> = ({ property, onDelete 
                                         "Удалить"
                                     )}
                                 </MenuItem>
-                                <MenuItem onClick={popupState.close}>Редактировать</MenuItem>
+                                {/*<MenuItem onClick={popupState.close}>Редактировать</MenuItem>*/}
                             </Menu>
                         </React.Fragment>
                     )}
